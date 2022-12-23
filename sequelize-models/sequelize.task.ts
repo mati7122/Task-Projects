@@ -21,6 +21,12 @@ const Task = sequelize.define('Task', {
 	},
 	state: {
 		type: DataTypes.BOOLEAN
+	},
+	relevance: {
+		type: DataTypes.ENUM,
+		validate: {
+			isIn: [[ 'less importante', 'medium importance', 'very important' ]]
+		}
 	}
 }, { timestamps: false });
 
