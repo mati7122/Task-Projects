@@ -1,10 +1,5 @@
 import taskSequelizeInstance from "../sequelize-models/sequelize.task";
 
-// interface TaskControllerInterface{
-// 	taskTable: Model<any, any>,
-
-// }
-
 interface TaskInterface {
 	taskName: string,
 	fastDescription: string,
