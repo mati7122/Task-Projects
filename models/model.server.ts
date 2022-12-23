@@ -1,36 +1,47 @@
+import hbs from 'hbs';
 import express from 'express';
-import { Sequelize } from 'sequelize';
+import router from '../routes/route';
+import routerTask from '../routes/route.task';
+// import routerProject from '../routes/routes.project';
 import connection from '../db/sequelize.instance';
 
-export class Server{
+export class Server {
 	constructor(
 		private PORT = process.env.PORT,
 		private app: express.Application = express()
-	){
+	) {
 		this.connectionDB();
+		this.middlewares();
+		this.routes();
 	}
 
-	async connectionDB(){
-		try{
+	middlewares() {
+		//Handlebars
+		this.app.set('view engine', 'hbs');
+		hbs.registerPartials(__dirname + '/views/partials');
+		//Body parser
+		this.app.use(express.json());
+	}
+
+	async connectionDB() {
+		try {
 			await connection.authenticate()
-			console.log('Connection established correctly');
+			console.log('Connection established correctly!');
 		}
-		catch(err){
+		catch (err) {
 			console.log(err);
 		}
 	}
 
-	manageDB(){}
+	manageDB() { }
 
-	routes(){
-		this.app.get('/', (req, res) => {
-			res.json({
-				msg: 'Succes!'
-			})
-		});
+	routes() {
+		this.app.use('/api', router);
+		this.app.use('/task', routerTask);
+		// this.app.use('/project', routerProject);
 	}
 
-	listen(){
+	listen() {
 		this.app.listen(this.PORT, () => {
 			console.log(`Server running in PORT: ${this.PORT}`);
 		})
