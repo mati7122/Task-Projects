@@ -1,6 +1,14 @@
 import { Sequelize } from 'sequelize';
+import { strict as assert } from 'assert';
+import { load } from 'ts-dotenv';
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+const env = load({
+	DB_NAME: String,
+	DB_USER: String,
+	DB_PASSWORD: String
+});
+
+const sequelize = new Sequelize(env.DB_NAME, env.DB_USER, env.DB_PASSWORD, {
 	host: 'localhost',
 	dialect: 'mysql'
 });
