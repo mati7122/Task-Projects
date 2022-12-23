@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
+import sequelize from '../db/sequelize.instance';
 
 const Task = sequelize.define('Task', {
 	name:{
-		type: DataTypes.VARCHAR(50),
+		type: DataTypes.STRING,
 		unique: true,
 		allowNull: false
 	},
