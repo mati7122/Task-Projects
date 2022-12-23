@@ -1,7 +1,7 @@
-import { Server } from './models/models.server';
+import { Server } from './models/model.server';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const app: express.Application = express();
+const app = new Server();
 app.listen();
 
