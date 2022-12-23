@@ -13,13 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
+const hbs_1 = __importDefault(require("hbs"));
 const express_1 = __importDefault(require("express"));
+const routes_1 = __importDefault(require("../routes/routes"));
 const sequelize_instance_1 = __importDefault(require("../db/sequelize.instance"));
 class Server {
     constructor(PORT = process.env.PORT, app = (0, express_1.default)()) {
         this.PORT = PORT;
         this.app = app;
         this.connectionDB();
+        this.middlewares();
+        this.routes();
+    }
+    middlewares() {
+        this.app.set('view engine', 'hbs');
+        hbs_1.default.registerPartials(__dirname + '/views/partials');
     }
     connectionDB() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -34,11 +42,7 @@ class Server {
     }
     manageDB() { }
     routes() {
-        this.app.get('/', (req, res) => {
-            res.json({
-                msg: 'Succes!'
-            });
-        });
+        this.app.use('/api', routes_1.default);
     }
     listen() {
         this.app.listen(this.PORT, () => {
