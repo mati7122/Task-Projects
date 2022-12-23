@@ -1,12 +1,11 @@
 import express from 'express';
 import { Sequelize } from 'sequelize';
-import connection from '../db/sequelize.instance.ts';
+import connection from '../db/sequelize.instance';
 
 export class Server{
 	constructor(
-		private PORT: number = process.env.PORT; 
-		private app: express.Application = express();
-		private sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, { host: 'localhost', dialect: 'mysql' });
+		private PORT = process.env.PORT,
+		private app: express.Application = express()
 	){
 		this.connectionDB();
 	}
@@ -22,6 +21,14 @@ export class Server{
 	}
 
 	manageDB(){}
+
+	routes(){
+		this.app.get('/', (req, res) => {
+			res.json({
+				msg: 'Succes!'
+			})
+		});
+	}
 
 	listen(){
 		this.app.listen(this.PORT, () => {
