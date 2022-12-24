@@ -15,8 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const hbs_1 = __importDefault(require("hbs"));
 const express_1 = __importDefault(require("express"));
-const routes_1 = __importDefault(require("../routes/routes"));
 const sequelize_instance_1 = __importDefault(require("../db/sequelize.instance"));
+const route_1 = __importDefault(require("../routes/route"));
+const route_task_1 = __importDefault(require("../routes/route.task"));
+const sequelize_instance_2 = __importDefault(require("../db/sequelize.instance"));
 class Server {
     constructor(PORT = process.env.PORT, app = (0, express_1.default)()) {
         this.PORT = PORT;
@@ -28,21 +30,32 @@ class Server {
     middlewares() {
         this.app.set('view engine', 'hbs');
         hbs_1.default.registerPartials(__dirname + '/views/partials');
+        this.app.use(express_1.default.json());
+        this.app.use('/task', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield sequelize_instance_1.default.sync();
+                next();
+            }
+            catch (err) {
+                console.log(err);
+                return res.status(500).json({ message: 'Server error, try later' });
+            }
+        }));
     }
     connectionDB() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield sequelize_instance_1.default.authenticate();
-                console.log('Connection established correctly');
+                yield sequelize_instance_2.default.authenticate();
+                console.log('Connection established correctly!');
             }
             catch (err) {
                 console.log(err);
             }
         });
     }
-    manageDB() { }
     routes() {
-        this.app.use('/api', routes_1.default);
+        this.app.use('/api', route_1.default);
+        this.app.use('/task', route_task_1.default);
     }
     listen() {
         this.app.listen(this.PORT, () => {

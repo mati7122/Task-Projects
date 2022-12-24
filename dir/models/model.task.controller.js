@@ -16,30 +16,27 @@ exports.TaskController = void 0;
 const sequelize_task_1 = __importDefault(require("../sequelize-models/sequelize.task"));
 ;
 class TaskController {
-    constructor() {
-        this.taskTable = new sequelize_task_1.default();
-    }
-    createTask({ taskName, fastDescription, completeDescription, initDate, finishDate, relevanceLabel }) {
+    createTask({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, belongsTo, createdBy }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const task = yield this.taskTable.create({ taskName, fastDescription, completeDescription, initDate, finishDate, relevanceLabel });
+            const task = yield sequelize_task_1.default.create({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, belongsTo, createdBy });
             return task;
         });
     }
     getAllTask() {
         return __awaiter(this, void 0, void 0, function* () {
-            const allTask = yield this.taskTable.findAll();
+            const allTask = yield sequelize_task_1.default.findAll();
             return allTask;
         });
     }
     getTaskById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const task = yield this.taskTable.findByPK(id);
+            const task = yield sequelize_task_1.default.findByPk(id);
             return task;
         });
     }
-    updateTask(id, ...rest) {
+    updateTask(id, { name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, belongsTo, createdBy }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const task = yield this.taskTable.update({ rest }, {
+            const task = yield sequelize_task_1.default.update({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, belongsTo, createdBy }, {
                 where: { id }
             });
             return task;
@@ -47,7 +44,7 @@ class TaskController {
     }
     deleteTask(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const task = yield this.taskTable.update({ state: false }, {
+            const task = yield sequelize_task_1.default.update({ state: false }, {
                 where: { id }
             });
             return task;
