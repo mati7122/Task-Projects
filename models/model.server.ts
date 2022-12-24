@@ -1,5 +1,7 @@
 import hbs from 'hbs';
 import express from 'express';
+import { Request, Response } from 'express';
+import sequelize from "../db/sequelize.instance";
 import router from '../routes/route';
 import routerTask from '../routes/route.task';
 // import routerProject from '../routes/routes.project';
@@ -21,6 +23,17 @@ export class Server {
 		hbs.registerPartials(__dirname + '/views/partials');
 		//Body parser
 		this.app.use(express.json());
+		//Database synchronization
+		this.app.use('/task', async (req: Request, res: Response, next) => {
+			try {
+				await sequelize.sync();
+				next()
+			}
+			catch (err) {
+				console.log(err);
+				return res.status(500).json({ message: 'Server error, try later' })
+			}
+		});
 	}
 
 	async connectionDB() {
@@ -32,8 +45,6 @@ export class Server {
 			console.log(err);
 		}
 	}
-
-	manageDB() { }
 
 	routes() {
 		this.app.use('/api', router);
