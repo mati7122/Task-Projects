@@ -23,30 +23,31 @@ const Task = sequelize.define('Task', {
 	},
 	state: { //Indica en que estado se encuentra la tarea { 'active': 1, 'deleted': 0 }
 		type: DataTypes.BOOLEAN,
-		defaultValue: true
+		defaultValue: true,
+		allowNull: true
 	},
-	relevance: {
+	relevanceLabel: {
 		type: DataTypes.ENUM,
-		validate: {
-			isIn: [['less importante', 'medium importance', 'very important']]
-		}
+		values: ['less important', 'medium important', 'very important']
 	},
-	belongsToProject: {
-		type: DataTypes.NUMBER,
-		defaultValue: 'single task',
-		references: {
-			model: Project,
-			key: 'id'
-		}
-	},
-	createdBy: {
-		type: DataTypes.STRING,
-		defaultValue: 'anonymous user',
-		references: {
-			model: User,
-			key: 'id'
-		}
-	}
+	// belongsToProject: {
+	// 	type: DataTypes.NUMBER,
+	// 	defaultValue: null,
+	// 	allowNull: true,
+	// 	references: {
+	// 		model: Project,
+	// 		key: 'id'
+	// 	}
+	// },
+	// createdBy: {
+	// 	type: DataTypes.NUMBER,
+	// 	defaultValue: null,
+	// 	allowNull: true,
+	// 	references: {
+	// 		model: User,
+	// 		key: 'id'
+	// 	}
+	// }
 }, { timestamps: false });
 
 // Task.belongsTo() //user
