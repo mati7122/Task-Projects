@@ -5,11 +5,15 @@ const taskController = new TaskController(); //Task controller instance
 const router = Router();
 
 router.post('/create', async (req: Request, res: Response) => {
-    const { body } = req;
-    const data = await taskController.createTask(body);
+
+    const { name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel } = req.body;
+
+    const data = await taskController.createTask({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel });
+
     res.json({
         data
     });
+
 });
 
 router.get('/get-all', (req: Request, res: Response) => { });
