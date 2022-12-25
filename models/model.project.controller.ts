@@ -1,54 +1,76 @@
-import projectSequelizeInstance from '../sequelize-models/sequelize.project';
+import { Op } from "sequelize";
+import projectModel from "../sequelize-models/sequelize.task";
 
 interface ProjectInterface {
-    projectName: string,
-    explicativeText: string,
-    initDate: Date,
-    finishDate: Date,
-    createdBy: number
+	name: string,
+	explicativeText: string,
+	initDate: Date,
+	finishDate: Date,
+	belongsTo?: number,
+	createdBy?: number
 };
 
 export class ProjectController {
 
-    private projectTable;
+	async createProject({ name, explicativeText, initDate, finishDate, belongsTo, createdBy }: ProjectInterface) {
 
-    constructor() {
-        this.projectTable = new projectSequelizeInstance();
-    }
+		const project = await projectModel.create({ name, explicativeText, initDate, finishDate, belongsTo, createdBy });
 
-    async createProject({ projectName, explicativeText, initDate, finishDate, createdBy }: ProjectInterface) {
-        const project = await this.projectTable.create({
-            projectName,
-            explicativeText,
-            initDate,
-            finishDate,
-            createdBy
-        });
-        return project;
-    }
+		return project;
 
-    async getAllProjects() {
-        const Allproject = await this.projectTable.findAll();
-        return Allproject;
-    }
+	};
 
-    async getProjectById(id: number) {
-        const project = await this.projectTable.findByPK(id);
-        return project;
-    }
+	async getAllProject() {
 
-    async updateProject(id: number, ...rest) {
-        const project = await this.projectTable.update({ rest }, {
-            where: { id }
-        });
-        return project;
-    }
+		const allProject = await projectModel.findAll({ where: { state: true } });
 
-    async deleteProject(id: number, ...rest) {
-        const project = await this.projectTable.update({ state: false }, {
-            where: { id }
-        });
-        return project;
-    }
+		return allProject;
+
+	};
+
+	async getProjectById(id: number) {
+
+		const project = await projectModel.findOne({ 
+
+			where: { 
+				[Op.and] : [ { id }, { state: true } ] 
+			} 
+
+		});
+
+		return project;
+
+	};
+
+	async updateProject(id: number, { name, explicativeText, initDate, finishDate, belongsTo, createdBy }: ProjectInterface) {
+
+		const projectRowsAffected = await projectModel.update({ name, explicativeText, initDate, finishDate, belongsTo, createdBy }, {
+			where: { id }
+		}); //Here, the affected records will always be one.
+
+		const projectUpdated = await projectModel.findByPk(id);
+
+		return {
+			projectRowsAffected,
+			projectUpdated
+		};
+
+	};
+
+	async deleteProject(id: number) {
+
+		const projectRowsAffected = await projectModel.update({ state: false }, {
+			where: { [ Op.and ] : [ { id }, { state: true } ] }
+		}) //Here, the affected records will always be one.
+
+		const projectUpdated = await projectModel.findByPk(id);
+
+		return {
+			projectRowsAffected,
+			projectUpdated
+		};
+
+	};
 
 }
+
