@@ -1,5 +1,6 @@
 import sequelize from "../db/sequelize.instance";
 import { DataTypes } from "sequelize";
+import Task from "./sequelize.task";
 import User from "./sequelize.user";
 
 const Project = sequelize.define('Project', {
@@ -14,23 +15,10 @@ const Project = sequelize.define('Project', {
     },
     finishDate: {
         type: DataTypes.DATE
-    },
-    state: { //Indica en que estado se encuentra el proyecto { 'active': 1, 'deleted': 0 }
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    },
-    createdBy: {
-        type: DataTypes.STRING,
-        defaultValue: 'anonymous user',
-        references: {
-            model: User,
-            key: 'id'
-        }
     }
+}, { timestamps: true, paranoid: true });
 
-}, { timestamps: false });
-
-// Project.belongsTo() //user
-// Project.hasMany() //task´s
+Project.belongsTo(User) //user
+Project.hasMany(Task) //task´s
 
 export default Project;

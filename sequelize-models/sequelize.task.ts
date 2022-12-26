@@ -21,36 +21,13 @@ const Task = sequelize.define('Task', {
 	finishDate: {
 		type: DataTypes.DATE
 	},
-	state: { //Indica en que estado se encuentra la tarea { 'active': 1, 'deleted': 0 }
-		type: DataTypes.BOOLEAN,
-		defaultValue: true,
-		allowNull: true
-	},
 	relevanceLabel: {
 		type: DataTypes.ENUM,
 		values: ['less important', 'medium important', 'very important']
-	},
-	// belongsToProject: {
-	// 	type: DataTypes.NUMBER,
-	// 	defaultValue: null,
-	// 	allowNull: true,
-	// 	references: {
-	// 		model: Project,
-	// 		key: 'id'
-	// 	}
-	// },
-	// createdBy: {
-	// 	type: DataTypes.NUMBER,
-	// 	defaultValue: null,
-	// 	allowNull: true,
-	// 	references: {
-	// 		model: User,
-	// 		key: 'id'
-	// 	}
-	// }
-}, { timestamps: false });
+	}
+}, { timestamps: true, paranoid: true });
 
-// Task.belongsTo() //user
-// Task.belongsTo() //project
+Task.belongsTo(User) //user
+Task.belongsTo(Project) //project
 
 export default Task;
