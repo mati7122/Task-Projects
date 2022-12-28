@@ -6,13 +6,20 @@ const task = new Task();
 
 export const createController = async (req: Request, res: Response) => {
 
+    const { query } = req;
     const { body } = req;
     
     try{
 
-        const data = await task.createTask(body);
+        if(!query.ProjectId){
+            const data = await task.createTask(body, Number(query?.UserId));
 
-        res.status(200).json( MessageSuccess(data) );
+            return res.status(200).json( MessageSuccess(data) );
+        }
+
+       const data = await task.createTask(body, Number(query?.UserId), Number(query?.ProjectId));
+
+       res.status(200).json( MessageSuccess(data) );
 
     }
     catch(err){
