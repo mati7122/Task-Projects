@@ -1,5 +1,4 @@
 import { Sequelize } from 'sequelize';
-import { strict as assert } from 'assert';
 import { load } from 'ts-dotenv';
 
 const env = load({
@@ -10,7 +9,8 @@ const env = load({
 
 const sequelize = new Sequelize(env.DB_NAME, env.DB_USER, env.DB_PASSWORD, {
 	host: 'localhost',
-	dialect: 'mysql'
+	dialect: 'mysql',
+	logging: false
 });
 
 export default sequelize;
