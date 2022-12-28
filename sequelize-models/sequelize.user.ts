@@ -4,7 +4,7 @@ import Task from './sequelize.task';
 import Project from './sequelize.project';
 
 const User = sequelize.define('User', {
-    userName: {
+    name: {
         type: DataTypes.STRING,
         unique: true
     },
@@ -12,19 +12,27 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING
     },
     profilePhoto: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: 'no_image'
     },
-    userAbout: {
+    about: {
         type: DataTypes.TEXT
     },
     role: {
         type: DataTypes.ENUM,
         values: [ 'ADMIN_ROLE', 'USER_ROLE' ],
-        defaultValue: 'USER'
+        defaultValue: 'USER_ROLE'
     }
 }, { timestamps: true, paranoid: true });
 
-User.hasMany(Task) //task´s
-User.hasMany(Project) //projects´s
+User.hasMany(Task); 
+Task.belongsTo(User);
+
+User.hasMany(Project);
+Project.belongsTo(User);
+
+Project.hasMany(Task);
+Task.belongsTo(Project);
 
 export default User;
