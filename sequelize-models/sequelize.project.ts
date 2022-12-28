@@ -1,7 +1,6 @@
 import sequelize from "../db/sequelize.instance";
 import { DataTypes } from "sequelize";
 import Task from "./sequelize.task";
-import User from "./sequelize.user";
 
 const Project = sequelize.define('Project', {
     name: {
@@ -18,7 +17,7 @@ const Project = sequelize.define('Project', {
     }
 }, { timestamps: true, paranoid: true });
 
-Project.belongsTo(User) //user
-Project.hasMany(Task) //task´s
+// Project.hasMany(Task) 
+// Task.belongsTo(Project);
 
 export default Project;
