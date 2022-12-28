@@ -1,19 +1,17 @@
-import projectModel from "../sequelize-models/sequelize.task";
+import projectModel from "../sequelize-models/sequelize.project";
 
 interface ProjectInterface {
 	name: string,
 	explicativeText: string,
 	initDate: Date,
-	finishDate: Date,
-	belongsTo?: number,
-	createdBy?: number
+	finishDate: Date
 };
 
 export class Project {
 
-	async createProject({ name, explicativeText, initDate, finishDate, belongsTo, createdBy }: ProjectInterface) {
+	async createProject(UserId: number, { name, explicativeText, initDate, finishDate }: ProjectInterface) {
 
-		const project = await projectModel.create({ name, explicativeText, initDate, finishDate, belongsTo, createdBy });
+		const project = await projectModel.create({ name, explicativeText, initDate, finishDate, UserId });
 
 		return project;
 
@@ -35,9 +33,9 @@ export class Project {
 
 	};
 
-	async updateProject(id: number, { name, explicativeText, initDate, finishDate, belongsTo, createdBy }: ProjectInterface) {
+	async updateProject(id: number, { name, explicativeText, initDate, finishDate }: ProjectInterface) {
 
-		const projectRowsAffected = await projectModel.update({ name, explicativeText, initDate, finishDate, belongsTo, createdBy }, {
+		const projectRowsAffected = await projectModel.update({ name, explicativeText, initDate, finishDate }, {
 			where: { id }
 		}); //Here, the affected records will always be one.
 
