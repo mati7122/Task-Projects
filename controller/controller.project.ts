@@ -6,11 +6,12 @@ const project = new Project();
 
 export const createController = async (req: Request, res: Response) => {
 
+    const { id } = req.query;
     const { body } = req;
     
     try{
 
-        const data = await project.createProject(body);
+        const data = await project.createProject(Number(id), body);
 
         res.status(200).json( MessageSuccess(data) );
 
