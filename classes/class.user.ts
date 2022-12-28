@@ -10,7 +10,7 @@ interface UserInterface {
 
 export class User {
 
-    async createUser({ name, password, photo, about, role }: UserInterface){
+    async createUser({ name, password, photo, about, role }: UserInterface) {
 
         const user = await UserModel.create({ name, password, photo, about, role });
 
@@ -18,7 +18,7 @@ export class User {
 
     };
 
-    async updateUser(id: number, { name, password, photo, about, role }: UserInterface){
+    async updateUser(id: number, { name, password, photo, about, role }: UserInterface) {
 
         const userRowsAffected = await UserModel.update({ name, password, photo, about, role }, {
             where: { id }
@@ -33,7 +33,7 @@ export class User {
 
     };
 
-    async deleteUser(id: number){
+    async deleteUser(id: number) {
 
         const userRowsAffected = await UserModel.destroy({ where: { id } });
 
@@ -45,6 +45,30 @@ export class User {
 		};
 
     };
+
+    async getAllUsers() {
+
+        const users = await UserModel.findAll();
+
+        return users;
+
+    }
+
+    async getUser(name: string) {
+
+        const user = await UserModel.findOne({ where: { name } });
+
+        return user;
+
+    };
+
+    async getUserById(id: number) {
+
+        const user = await UserModel.findByPk(id);
+
+        return user;
+
+    }
 
 };
 
