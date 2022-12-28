@@ -1,13 +1,14 @@
 import hbs from 'hbs';
-import express, { NextFunction } from 'express';
-import { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import sequelize from "../db/sequelize.instance";
 import router from '../routes/route';
 import routerTask from '../routes/routes.task';
 import routerAdminTask from '../routes/routes.admin.task';
 import routerProject from '../routes/routes.project';
 import routerAdminProject from '../routes/routes.admin.project';
+import routerUser from '../routes/routes.user';
 import connection from '../db/sequelize.instance';
+import { validateJWT } from '../middlewares/validate.jwt';
 
 export class Server {
 
@@ -55,11 +56,11 @@ export class Server {
 
 		};
 
-		this.app.use(this.paths.user);
-		this.app.use(this.paths.task, databaseSynchronization);
-		this.app.use(this.paths.project, databaseSynchronization);
-		this.app.use(this.paths.adminTask, databaseSynchronization);
-		this.app.use(this.paths.adminProject, databaseSynchronization);
+		this.app.use(this.paths.user, databaseSynchronization);
+		this.app.use(this.paths.task, databaseSynchronization, validateJWT);
+		this.app.use(this.paths.project, databaseSynchronization, validateJWT);
+		this.app.use(this.paths.adminTask, databaseSynchronization, validateJWT);
+		this.app.use(this.paths.adminProject, databaseSynchronization, validateJWT);
 
 	}
 
@@ -78,7 +79,7 @@ export class Server {
 	routes() {
 
 		this.app.use(this.paths.api, router);
-		this.app.use(this.paths.user);
+		this.app.use(this.paths.user, routerUser);
 		this.app.use(this.paths.task, routerTask);
 		this.app.use(this.paths.project, routerProject);
 		this.app.use(this.paths.adminTask, routerAdminTask);
