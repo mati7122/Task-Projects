@@ -1,7 +1,5 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/sequelize.instance';
-import Project from './sequelize.project';
-import User from './sequelize.user';
 
 const Task = sequelize.define('Task', {
 	name: {
@@ -26,8 +24,5 @@ const Task = sequelize.define('Task', {
 		values: ['less important', 'medium important', 'very important']
 	}
 }, { timestamps: true, paranoid: true });
-
-Task.belongsTo(User) //user
-Task.belongsTo(Project) //project
 
 export default Task;
