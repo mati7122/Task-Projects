@@ -6,16 +6,14 @@ interface TaskInterface {
 	explicativeText: string,
 	initDate: Date,
 	finishDate: Date,
-	relevanceLabel: string,
-	belongsTo?: number,
-	createdBy?: number
+	relevanceLabel: string
 };
 
 export class Task {
 
-	async createTask({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, belongsTo, createdBy }: TaskInterface) {
+	async createTask({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel }: TaskInterface, UserId: number, ProjectId?: number) {
 
-		const task = await taskModel.create({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, belongsTo, createdBy });
+		const task = await taskModel.create({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, UserId, ProjectId });
 
 		return task;
 
@@ -37,9 +35,9 @@ export class Task {
 
 	};
 
-	async updateTask(id: number, { name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, belongsTo, createdBy }: TaskInterface) {
+	async updateTask(id: number, { name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel }: TaskInterface) {
 
-		const taskRowsAffected = await taskModel.update({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel, belongsTo, createdBy }, {
+		const taskRowsAffected = await taskModel.update({ name, fastDescription, explicativeText, initDate, finishDate, relevanceLabel }, {
 			where: { id }
 		}); //Here, the affected records will always be one.
 
