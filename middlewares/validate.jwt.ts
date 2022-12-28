@@ -32,6 +32,8 @@ export const validateJWT = async (req: Request, res: Response, next: NextFunctio
             });
         }
 
+        req.user = user;
+
         next();
     }
 
