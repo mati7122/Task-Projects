@@ -19,12 +19,12 @@ export const createController = async (req: Request, res: Response) => {
 
         const data = await user.createUser({ name, password, photo, about, role });
 
-        res.status(200).json( MessageSuccess(data) );
+        res.status(200).json(MessageSuccess(data));
 
     }
     catch (err) {
 
-        res.status(500).json( MessageError(err) );
+        res.status(500).json(MessageError(err));
 
     }
 
@@ -36,12 +36,12 @@ export const getAllController = async (req: Request, res: Response) => {
 
         const data = await user.getAllUsers();
 
-        res.status(200).json( MessageSuccess(data) );
+        res.status(200).json(MessageSuccess(data));
 
     }
-    catch(err){
+    catch (err) {
 
-        res.status(500).json( MessageError(err) );
+        res.status(500).json(MessageError(err));
 
     }
 
@@ -53,13 +53,14 @@ export const logInController = async (req: Request, res: Response) => {
 
     try {
         const data = await user.getUser(name);
-        const id = data.id;
 
         if (!data) {
 
             throw new Error('The user is not registered');
 
         }
+
+        const id = data.id;
 
         if (!bcrypt.compareSync(password, data.password)) {
 
@@ -75,13 +76,13 @@ export const logInController = async (req: Request, res: Response) => {
                 });
             })
             .catch(err => {
-                res.status(500).json( MessageError(err) );
+                res.status(500).json(MessageError(err));
             })
 
     }
     catch (err) {
 
-        res.status(500).json( MessageError(err) );
+        res.status(500).json(MessageError(err));
 
     }
 
