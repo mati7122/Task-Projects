@@ -19,6 +19,8 @@ export class Task {
 
 	};
 
+	/* TODO: Modificar getAllTask para obtener las tareas segun el usuario que 
+	 las requiera*/
 	async getAllTask() {
 
 		const allTask = await taskModel.findAll();
