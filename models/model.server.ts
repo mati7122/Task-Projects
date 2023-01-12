@@ -1,4 +1,3 @@
-import hbs from 'hbs';
 import express, { NextFunction, Request, Response } from 'express';
 import sequelize from "../db/sequelize.instance";
 import router from '../routes/route';
@@ -9,6 +8,7 @@ import routerAdminProject from '../routes/routes.admin.project';
 import routerUser from '../routes/routes.user';
 import connection from '../db/sequelize.instance';
 import { validateJWT } from '../middlewares/validate.jwt';
+import { validateRole } from '../middlewares/validate.role';
 
 export class Server {
 
@@ -16,7 +16,7 @@ export class Server {
 		private PORT = process.env.PORT,
 		private app: express.Application = express(),
 		private paths = {
-			api: '/api',
+			doc: '/docs',
 			user: '/user',
 			task: '/task',
 			project: '/project',
@@ -31,19 +31,18 @@ export class Server {
 
 	middlewares() {
 
-		//Handlebars
-		this.app.set('view engine', 'hbs');
-		hbs.registerPartials(__dirname + '/views/partials');
-
 		//Body parser
 		this.app.use(express.json());
+
+		//Public
+		this.app.use(express.static('public'));
 
 		//Database synchronization
 		async function databaseSynchronization(req: Request, res: Response, next: NextFunction) {
 
 			try {
 
-				await sequelize.sync();
+				await sequelize.sync({ alter: true });
 				next();
 
 			}
@@ -59,8 +58,8 @@ export class Server {
 		this.app.use(this.paths.user, databaseSynchronization);
 		this.app.use(this.paths.task, databaseSynchronization, validateJWT);
 		this.app.use(this.paths.project, databaseSynchronization, validateJWT);
-		this.app.use(this.paths.adminTask, databaseSynchronization, validateJWT);
-		this.app.use(this.paths.adminProject, databaseSynchronization, validateJWT);
+		this.app.use(this.paths.adminTask, databaseSynchronization, validateJWT, validateRole);
+		this.app.use(this.paths.adminProject, databaseSynchronization, validateJWT, validateRole);
 
 	}
 
@@ -78,7 +77,7 @@ export class Server {
 
 	routes() {
 
-		this.app.use(this.paths.api, router);
+		this.app.use(this.paths.doc, router);
 		this.app.use(this.paths.user, routerUser);
 		this.app.use(this.paths.task, routerTask);
 		this.app.use(this.paths.project, routerProject);
