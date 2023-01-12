@@ -12,7 +12,7 @@ const userInstance = new User();
 
 export const validateJWT = async (req: Request, res: Response, next: NextFunction) => {
 
-    const token: string = req.header('x-token');
+    const token: (string | undefined) = req.header('x-token');
 
     if (!token) {
         res.status(401).json({
@@ -37,8 +37,8 @@ export const validateJWT = async (req: Request, res: Response, next: NextFunctio
         next();
     }
 
-    catch(err){
-        res.status(500).json( MessageError(err) );
+    catch (err) {
+        res.status(500).json(MessageError(<Error>err));
     }
-    
+
 }
