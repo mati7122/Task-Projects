@@ -1,28 +1,31 @@
 import { Router } from 'express';
-import { body, param } from 'express-validator';
+import { check } from 'express-validator';
 import { createController, getAllController, getByIdController, updateController, deleteController } from '../controller/controller.task';
+import { validateErrors } from '../helpers/getErrorsbyExpressValidator';
 
 const router = Router();
 
 router.post('/create',
-    body('name').exists().notEmpty().isString(),
-    body('fastDescription').exists().notEmpty().isString(),
-    body('explicativeText').exists().notEmpty().isString(),
-    body('initDate').exists().notEmpty().isString(),
-    body('finishDate').exists().notEmpty().isString(),
-    body('relevanceLabel').exists().notEmpty().isString(),
+    [check('name', 'Name must be a valid string').exists().notEmpty().isString(),
+    check('fastDescription', 'fastDescription must be a valid description').exists().notEmpty().isString(),
+    check('explicativeText', 'explicativeText must be a valid string').exists().notEmpty().isString(),
+    check('initDate', 'Must be a valid date').exists().notEmpty().isDate(),
+    check('finishDate', 'Must be a valid date').exists().notEmpty().isDate(),
+    check('relevanceLabel').exists().notEmpty().isString(),
+        validateErrors
+    ],
     createController);
 
 router.get('/get-all', getAllController);
 
 router.get('/get/:id',
-    param('id').exists().notEmpty().isNumeric(),
+
     getByIdController);
 
 router.put('/update/:id', updateController);
 
 router.delete('/delete/:id',
-    param('id').exists().notEmpty().isNumeric(),
+
     deleteController);
 
 export default router;
