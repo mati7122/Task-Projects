@@ -7,7 +7,7 @@ const env = load({
 
 export const generateJWT = (payload: Object) => new Promise((resolve, reject) => {
 
-    jwt.sign(payload, env.JWT_PRIVATEKEY, (err, token) => {
+    jwt.sign(payload, env.JWT_PRIVATEKEY, { expiresIn: '1h' },(err, token) => {
 
         if (err) {
             console.log('An error has ocurred, we do can`t provide the token');
