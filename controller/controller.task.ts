@@ -47,8 +47,6 @@ export const createController = async (req: Request, res: Response) => {
 
         const ifProjectExist = await project.getProjectById(Number(req.query.projectId));
 
-        console.log(ifProjectExist);
-
         if (!ifProjectExist) {
             return res.status(400).json({
                 message: 'The referenced project don´t exist'
