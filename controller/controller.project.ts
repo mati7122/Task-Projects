@@ -86,7 +86,11 @@ export const deleteController = async (req: Request, res: Response) => { //TODO:
 
     try {
 
-        const data = await project.deleteProject(Number(id));
+        let data = await project.deleteProject(Number(id));
+
+        if(data.projectUpdated === null){
+            return res.status(401).json(MessageError('The project that you want to deleted, don`t exist.'))
+        }
 
         res.status(200).json(MessageSuccess(data.projectUpdated));
 
