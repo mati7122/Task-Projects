@@ -4,8 +4,7 @@ import sequelize from '../db/sequelize.instance';
 const Task = sequelize.define('Task', {
 	name: {
 		type: DataTypes.STRING,
-		unique: true,
-		allowNull: false
+		allowNull: false,
 	},
 	fastDescription: {
 		type: DataTypes.TEXT
